@@ -1,0 +1,49 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "OK Cupid Message Exporter";
+}
+
+<h2>OK Cupid Message Exporter</h2>
+<button id="import-messages-button" value="Import Messages">Import Messages</button><br/>
+
+<button id="import-sent-messages-button" value="Import Messages">Import Sent Messages</button>
+<span id="import-result"></span>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#import-messages-button").click(function () {
+            
+            $.ajax({
+                url: "@Url.Action("Import")",
+                beforeSend: function () {
+                    $("#import-result").html("Loading <img src=\"@Url.Content("~/Content/images/loading.gif")\" />");
+                },
+                success: function(data) {
+                    if (data == "@((int)HttpStatusCode.OK)") {
+                        $("#import-result").text("Import succeeded!");
+                    } else {
+                        $("#import-result").text("Import failed!");
+                    }
+                },
+                
+            });
+        });
+        $("#import-sent-messages-button").click(function () {
+
+            $.ajax({
+                url: "@Url.Action("ImportSent")",
+                beforeSend: function () {
+                    $("#import-result").html("Loading <img src=\"@Url.Content("~/Content/images/loading.gif")\" />");
+                },
+                success: function (data) {
+                    if (data == "@((int)HttpStatusCode.OK)") {
+                        $("#import-result").text("Import succeeded!");
+                    } else {
+                        $("#import-result").text("Import failed!");
+                    }
+                },
+
+            });
+        });
+    });
+</script>
